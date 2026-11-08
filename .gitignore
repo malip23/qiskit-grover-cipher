@@ -218,3 +218,22 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ---- Project-specific ----
+# Virtual environment for this project
+qenv/
+
+# Credentials: NEVER commit these. Load IBM credentials only via
+# QiskitRuntimeService.save_account(), which stores them in ~/.qiskit/
+qiskit-ibm.json
+*.apikey
+*credentials*.json
+*token*.txt
+.qiskit/
+
+# Results: small JSON hardware results ARE committed (the demo reads them).
+# Large caches and scratch outputs are not.
+results/cache/
+results/*.npy
+results/*.pkl
+results/tmp_*
