@@ -119,16 +119,26 @@ python -m src.grover --n 3 --seed 1        # random plaintext and key
 
 ```bash
 # Free offline dry run on a noisy snapshot of an IBM device (no account, no queue):
-python -m src.run_hardware --n 2 --plaintext 1 --key 2 --fake
+python -m src.run_hardware --n 3 --plaintext 5 --key 6 --sweep --fake
 
 # Real hardware: uses your IBM Quantum time and asks you to confirm before submitting
-python -m src.run_hardware --n 2 --plaintext 1 --key 2
-python -m src.run_hardware --n 3 --plaintext 5 --key 6 --shots 4096
+python -m src.run_hardware --n 2 --plaintext 1 --key 2 --sweep
+python -m src.run_hardware --n 3 --plaintext 5 --key 6 --sweep
 ```
 
-This picks the least busy device, transpiles with `generate_preset_pass_manager(optimization_level=3)`,
-runs with `SamplerV2` and dynamical decoupling, and saves counts and metadata to
-`results/<kind>_n<n>_p<P>_k<K>_<backend>_<time>.json`. Commit these JSON files so the demo can show them.
+| Option | What it does |
+| --- | --- |
+| `--sweep` | Runs 0, 1, …, optimal+1 Grover iterations as several circuits in **one job** (one queue wait), so you can watch the key's probability rise and fall on the device |
+| `--exact` | Uses the exact S-box instead of the cheaper relative-phase one, for before/after comparisons |
+| `--fake [Name]` | Runs locally on a noisy fake backend (default `FakeTorino`) instead of real hardware |
+| `--shots`, `--iterations`, `--backend`, `--no-dd` | Shots per circuit, a fixed iteration count, a specific device, turn off dynamical decoupling |
+
+The runner picks the least busy device, transpiles with `generate_preset_pass_manager(optimization_level=3)`,
+runs with `SamplerV2` and dynamical decoupling, and saves counts and metadata to `results/*.json`.
+Commit these JSON files so the demo can show them.
+
+> `SamplerV2` is deprecated as of qiskit-ibm-runtime 0.50 but works with the pinned 0.51.0. Its
+> replacement is `qiskit_ibm_runtime.executor_sampler.Sampler`; migrate before upgrading the package.
 
 ### Demo
 
@@ -136,9 +146,16 @@ runs with `SamplerV2` and dynamical decoupling, and saves counts and metadata to
 streamlit run app.py
 ```
 
-Pick n, a plaintext and a secret key. The demo shows the ciphertext, the classical guess count, a
-stepped / animated chart of key probabilities per Grover iteration, the simulator histogram, and a
-hardware histogram **loaded from `results/`**, so it never depends on a live hardware queue.
+Pick n, a plaintext and a secret key. The demo shows:
+
+1. The ciphertext and the classical guess count vs. Grover's oracle calls
+2. A stepped / animated chart of key probabilities per Grover iteration
+3. The simulator histogram, the cost of the exact vs. relative-phase S-box, and circuit diagrams
+4. Hardware results **loaded from `results/`**, so the demo never depends on a live hardware queue:
+   the histogram, the measured vs. ideal sweep curve, and a side-by-side of ideal, noisy and hardware runs
+5. A "why it matters" chart scaling classical vs. Grover key search up to AES-128
+
+`results/` ships with **fake-backend** sweeps (clearly labelled as noisy simulations) for n = 2 and 3.
 
 ### Circuit cost report
 

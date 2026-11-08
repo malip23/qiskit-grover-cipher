@@ -1,0 +1,193 @@
+{
+  "backend_kind": "fake",
+  "backend": "fake_torino",
+  "timestamp": "2026-11-08T03:07:08+00:00",
+  "n_bits": 3,
+  "sbox": [
+    6,
+    4,
+    1,
+    7,
+    2,
+    0,
+    3,
+    5
+  ],
+  "relative_phase": false,
+  "plaintext": 5,
+  "key": 6,
+  "ciphertext": 7,
+  "iterations": 2,
+  "shots": 4096,
+  "optimization_level": 3,
+  "dynamical_decoupling": true,
+  "job_id": "4e5057d6-2dda-4b97-9931-ea3799dd014c",
+  "counts": {
+    "110": 2677,
+    "101": 177,
+    "000": 143,
+    "100": 227,
+    "010": 197,
+    "011": 194,
+    "001": 162,
+    "111": 319
+  },
+  "correct_key_probability": 0.653564453125,
+  "theoretical_success": 0.9453125000000001,
+  "logical_metrics": {
+    "num_qubits": 3,
+    "gate_count": 75,
+    "two_qubit_gates": 12,
+    "multi_qubit_gates": 12,
+    "depth": 45,
+    "two_qubit_depth": 12,
+    "ops": {
+      "x": 28,
+      "h": 23,
+      "ccx": 12,
+      "cx": 12,
+      "measure": 3,
+      "barrier": 1
+    }
+  },
+  "transpiled_metrics": {
+    "num_qubits": 133,
+    "gate_count": 506,
+    "two_qubit_gates": 106,
+    "multi_qubit_gates": 0,
+    "depth": 385,
+    "two_qubit_depth": 106,
+    "ops": {
+      "sx": 218,
+      "rz": 174,
+      "cz": 106,
+      "x": 8,
+      "measure": 3,
+      "barrier": 1
+    }
+  },
+  "sweep": [
+    {
+      "iterations": 0,
+      "counts": {
+        "110": 524,
+        "111": 504,
+        "100": 566,
+        "010": 446,
+        "001": 519,
+        "000": 546,
+        "011": 495,
+        "101": 496
+      },
+      "correct_key_probability": 0.1279296875,
+      "theoretical_success": 0.12499999999999997,
+      "transpiled_metrics": {
+        "num_qubits": 133,
+        "gate_count": 9,
+        "two_qubit_gates": 0,
+        "multi_qubit_gates": 0,
+        "depth": 3,
+        "two_qubit_depth": 0,
+        "ops": {
+          "rz": 6,
+          "sx": 3,
+          "measure": 3,
+          "barrier": 1
+        }
+      }
+    },
+    {
+      "iterations": 1,
+      "counts": {
+        "110": 2496,
+        "100": 319,
+        "000": 228,
+        "010": 224,
+        "011": 185,
+        "101": 209,
+        "111": 231,
+        "001": 204
+      },
+      "correct_key_probability": 0.609375,
+      "theoretical_success": 0.7812499999999999,
+      "transpiled_metrics": {
+        "num_qubits": 133,
+        "gate_count": 261,
+        "two_qubit_gates": 52,
+        "multi_qubit_gates": 0,
+        "depth": 193,
+        "two_qubit_depth": 52,
+        "ops": {
+          "sx": 112,
+          "rz": 93,
+          "cz": 52,
+          "x": 4,
+          "measure": 3,
+          "barrier": 1
+        }
+      }
+    },
+    {
+      "iterations": 2,
+      "counts": {
+        "110": 2677,
+        "101": 177,
+        "000": 143,
+        "100": 227,
+        "010": 197,
+        "011": 194,
+        "001": 162,
+        "111": 319
+      },
+      "correct_key_probability": 0.653564453125,
+      "theoretical_success": 0.9453125000000001,
+      "transpiled_metrics": {
+        "num_qubits": 133,
+        "gate_count": 506,
+        "two_qubit_gates": 106,
+        "multi_qubit_gates": 0,
+        "depth": 385,
+        "two_qubit_depth": 106,
+        "ops": {
+          "sx": 218,
+          "rz": 174,
+          "cz": 106,
+          "x": 8,
+          "measure": 3,
+          "barrier": 1
+        }
+      }
+    },
+    {
+      "iterations": 3,
+      "counts": {
+        "110": 989,
+        "010": 430,
+        "001": 404,
+        "111": 476,
+        "101": 427,
+        "011": 501,
+        "000": 428,
+        "100": 441
+      },
+      "correct_key_probability": 0.241455078125,
+      "theoretical_success": 0.330078125,
+      "transpiled_metrics": {
+        "num_qubits": 133,
+        "gate_count": 751,
+        "two_qubit_gates": 158,
+        "multi_qubit_gates": 0,
+        "depth": 571,
+        "two_qubit_depth": 158,
+        "ops": {
+          "sx": 325,
+          "rz": 257,
+          "cz": 158,
+          "x": 11,
+          "measure": 3,
+          "barrier": 1
+        }
+      }
+    }
+  ]
+}

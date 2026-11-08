@@ -1,20 +1,33 @@
 """Reversible S-box circuits:  |x>  ->  |S(x)>  on n_bits qubits.
 
 =============================================================================
-This is a correct, working BASELINE synthesis. It is the main place to
-optimize (fewer CNOTs, lower depth, hardware-aware layout, ancilla tricks);
-see docs/OPTIMIZATION_NOTES.md for measured costs and ideas.
-
-CONTRACT - keep this exact signature, the rest of the project depends on it:
+CONTRACT - keep this signature, the rest of the project depends on it:
 
     def sbox_circuit(sbox: list[int], n_bits: int) -> QuantumCircuit
 
   * The returned circuit acts on exactly n_bits qubits (no ancillas), in place.
   * Qubit i holds bit i of x (Qiskit's little-endian convention).
-  * It must map every basis state |x> to |S(x)> with NO extra phase,
-    because the oracle uncomputes it with .inverse(). tests/test_sbox.py
-    checks both conditions; run `pytest tests/test_sbox.py` after any change.
+  * Every basis state |x> must go to |S(x)>, possibly times a phase e^{i phi_x}
+    (see "Relative phases" below). Run `pytest` after any change.
+
+See docs/OPTIMIZATION_NOTES.md for measured costs and further ideas.
 =============================================================================
+
+Relative phases (the optimization used by default)
+--------------------------------------------------
+Inside the oracle the S-box is always used as  S^-1 . (mark) . S, and the
+marking step only multiplies basis states by +1 or -1 (it is "diagonal").
+If our circuit actually does |x> -> e^{i phi_x} |S(x)>, i.e. D.S with D
+diagonal, the phases cancel:  S^-1 D^-1 (mark) D S = S^-1 (mark) S,
+because diagonal matrices commute. So the S-box only needs to be right
+"up to diagonal phases".
+
+That lets us swap each Toffoli (CCX) for a relative-phase Toffoli (RCCX) and
+each 3-control MCX for RC3X. Each of those is a permutation times a phase,
+so the whole circuit is still D.S. After transpiling to IBM hardware:
+    CCX  -> 7 two-qubit gates     RCCX -> 3
+    C3X  -> 18 two-qubit gates    RC3X -> 6
+Pass relative_phase=False to get the exact (phase-free) circuit.
 
 Baseline algorithm: transformation-based synthesis
 (Miller, Maslov, Dueck, "A Transformation Based Algorithm for Reversible
@@ -36,7 +49,7 @@ from __future__ import annotations
 
 import numpy as np
 from qiskit import QuantumCircuit
-from qiskit.circuit.library import UnitaryGate
+from qiskit.circuit.library import RC3XGate, RCCXGate, UnitaryGate
 
 
 def _bits_set(x: int, n_bits: int) -> list[int]:
@@ -79,10 +92,15 @@ def _transformation_gates(sbox: list[int], n_bits: int) -> list[tuple[list[int],
     return gates
 
 
-def sbox_circuit(sbox: list[int], n_bits: int) -> QuantumCircuit:
+def sbox_circuit(sbox: list[int], n_bits: int, *, relative_phase: bool = True) -> QuantumCircuit:
     """Returns a reversible circuit on n_bits qubits mapping |x> to |S(x)>.
 
-    BASELINE (transformation-based synthesis); see module docstring.
+    Transformation-based synthesis; see module docstring.
+
+    Args:
+        relative_phase: True (default) uses relative-phase Toffolis, so each |x>
+            picks up a phase e^{i phi_x}. That is fine inside the oracle and much
+            cheaper on hardware. False gives the exact, phase-free circuit.
     """
     if sorted(sbox) != list(range(2 ** n_bits)):
         raise ValueError("sbox must be a permutation of 0 .. 2**n_bits - 1")
@@ -94,8 +112,12 @@ def sbox_circuit(sbox: list[int], n_bits: int) -> QuantumCircuit:
             qc.x(target)
         elif len(controls) == 1:
             qc.cx(controls[0], target)
+        elif relative_phase and len(controls) == 2:
+            qc.append(RCCXGate(), [*controls, target])   # Toffoli up to a phase
+        elif relative_phase and len(controls) == 3:
+            qc.append(RC3XGate(), [*controls, target])   # 3-control Toffoli up to a phase
         else:
-            qc.mcx(controls, target)
+            qc.mcx(controls, target)                      # exact multi-controlled X
     return qc
 
 

@@ -45,6 +45,19 @@ def test_oracle_marks_only_the_key(n_bits, plaintext, key):
 
 
 @pytest.mark.parametrize("n_bits", [2, 3, 4])
+def test_oracle_exact_for_every_plaintext_and_key(n_bits):
+    # Exhaustive: guards the relative-phase S-box (its phases must cancel inside the oracle).
+    sbox = cipher.get_sbox(n_bits)
+    for plaintext in range(2 ** n_bits):
+        for key in range(2 ** n_bits):
+            ct = cipher.encrypt(plaintext, key, sbox)
+            u = Operator(build_oracle(sbox, n_bits, plaintext, ct)).data
+            expected = np.ones(2 ** n_bits)
+            expected[key] = -1
+            assert np.allclose(u, np.diag(expected)), f"P={plaintext} K={key}"
+
+
+@pytest.mark.parametrize("n_bits", [2, 3, 4])
 def test_optimal_iterations(n_bits):
     assert optimal_iterations(n_bits) == {2: 1, 3: 2, 4: 3}[n_bits]
 

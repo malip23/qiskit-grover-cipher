@@ -52,9 +52,10 @@ def diffusion(n_bits: int) -> QuantumCircuit:
     return qc
 
 
-def grover_iteration(sbox: list[int], n_bits: int, plaintext: int, ciphertext: int) -> QuantumCircuit:
+def grover_iteration(sbox: list[int], n_bits: int, plaintext: int, ciphertext: int,
+                     relative_phase: bool = True) -> QuantumCircuit:
     """One Grover iteration (oracle then diffusion)."""
-    qc = build_oracle(sbox, n_bits, plaintext, ciphertext)
+    qc = build_oracle(sbox, n_bits, plaintext, ciphertext, relative_phase=relative_phase)
     qc.compose(diffusion(n_bits), inplace=True)
     qc.name = "Grover iteration"
     return qc
@@ -62,18 +63,19 @@ def grover_iteration(sbox: list[int], n_bits: int, plaintext: int, ciphertext: i
 
 def build_grover_circuit(sbox: list[int], n_bits: int, plaintext: int, ciphertext: int,
                          iterations: int | None = None, measure: bool = True,
-                         barriers: bool = False) -> QuantumCircuit:
+                         barriers: bool = False, relative_phase: bool = True) -> QuantumCircuit:
     """Full Grover circuit: H on all key qubits, `iterations` x (oracle + diffusion), measure.
 
     Args:
-        iterations: number of Grover iterations; default is optimal_iterations(n_bits).
-        measure:    add measure_all() (classical register named "meas").
-        barriers:   add barriers between stages (nicer drawings; slightly blocks
-                    transpiler optimization, so leave off for hardware).
+        iterations:     number of Grover iterations; default is optimal_iterations(n_bits).
+        measure:        add measure_all() (classical register named "meas").
+        barriers:       add barriers between stages (nicer drawings; slightly blocks
+                        transpiler optimization, so leave off for hardware).
+        relative_phase: use the cheaper relative-phase S-box (default; same results).
     """
     if iterations is None:
         iterations = optimal_iterations(n_bits)
-    step = grover_iteration(sbox, n_bits, plaintext, ciphertext)
+    step = grover_iteration(sbox, n_bits, plaintext, ciphertext, relative_phase)
 
     qc = QuantumCircuit(n_bits, name=f"Grover n={n_bits} r={iterations}")
     qc.h(range(n_bits))  # start in an equal superposition of all 2**n keys

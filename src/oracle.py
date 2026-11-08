@@ -46,9 +46,14 @@ def _x_where(qc: QuantumCircuit, value: int, n_bits: int, bit: int) -> None:
             qc.x(i)
 
 
-def build_oracle(sbox: list[int], n_bits: int, plaintext: int, ciphertext: int) -> QuantumCircuit:
-    """Phase oracle marking the key K with S(plaintext XOR K) == ciphertext."""
-    sbox_qc = sbox_circuit(sbox, n_bits)
+def build_oracle(sbox: list[int], n_bits: int, plaintext: int, ciphertext: int,
+                 relative_phase: bool = True) -> QuantumCircuit:
+    """Phase oracle marking the key K with S(plaintext XOR K) == ciphertext.
+
+    relative_phase: use the cheaper relative-phase S-box (default). Its extra
+    phases cancel between S and S^-1 because the marking step is diagonal.
+    """
+    sbox_qc = sbox_circuit(sbox, n_bits, relative_phase=relative_phase)
     qubits = list(range(n_bits))
 
     qc = QuantumCircuit(n_bits, name="Oracle")

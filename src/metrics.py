@@ -117,20 +117,25 @@ def cost_report(backend_name: str = "FakeTorino", optimization_level: int = 3) -
     from .sbox_circuit import sbox_circuit, sbox_reference_circuit
 
     backend = get_fake_backend(backend_name)
+    after = lambda qc: before_after_metrics(qc, backend, optimization_level)["after"]
     rows = []
     for n in (2, 3, 4):
         sb = cipher.get_sbox(n)
-        s_after = before_after_metrics(sbox_circuit(sb, n), backend, optimization_level)["after"]
-        ref_after = before_after_metrics(sbox_reference_circuit(sb, n), backend, optimization_level)["after"]
-        grover = build_grover_circuit(sb, n, 1, cipher.encrypt(1, 2, sb), measure=False)
-        g_after = before_after_metrics(grover, backend, optimization_level)["after"]
+        ct = cipher.encrypt(1, 2, sb)
+        s_exact = after(sbox_circuit(sb, n, relative_phase=False))
+        s_fast = after(sbox_circuit(sb, n))
+        ref = after(sbox_reference_circuit(sb, n))
+        g_exact = after(build_grover_circuit(sb, n, 1, ct, measure=False, relative_phase=False))
+        g_fast = after(build_grover_circuit(sb, n, 1, ct, measure=False))
         rows.append({
             "n": n,
-            "sbox_2q": s_after["two_qubit_gates"],
-            "sbox_depth": s_after["depth"],
-            "ref_unitary_2q": ref_after["two_qubit_gates"],
-            "grover_2q": g_after["two_qubit_gates"],
-            "grover_depth": g_after["depth"],
+            "sbox_2q_exact": s_exact["two_qubit_gates"],
+            "sbox_2q_relphase": s_fast["two_qubit_gates"],
+            "ref_unitary_2q": ref["two_qubit_gates"],
+            "grover_2q_exact": g_exact["two_qubit_gates"],
+            "grover_2q_relphase": g_fast["two_qubit_gates"],
+            "grover_depth_exact": g_exact["depth"],
+            "grover_depth_relphase": g_fast["depth"],
         })
     return rows
 

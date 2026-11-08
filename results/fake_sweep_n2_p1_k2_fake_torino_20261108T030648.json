@@ -1,0 +1,140 @@
+{
+  "backend_kind": "fake",
+  "backend": "fake_torino",
+  "timestamp": "2026-11-08T03:06:48+00:00",
+  "n_bits": 2,
+  "sbox": [
+    2,
+    0,
+    3,
+    1
+  ],
+  "relative_phase": true,
+  "plaintext": 1,
+  "key": 2,
+  "ciphertext": 1,
+  "iterations": 1,
+  "shots": 4096,
+  "optimization_level": 3,
+  "dynamical_decoupling": true,
+  "job_id": "437fdb87-a2bf-42be-ba25-1b753c8a3eab",
+  "counts": {
+    "10": 3960,
+    "00": 66,
+    "11": 59,
+    "01": 11
+  },
+  "correct_key_probability": 0.966796875,
+  "theoretical_success": 1.0,
+  "logical_metrics": {
+    "num_qubits": 2,
+    "gate_count": 24,
+    "two_qubit_gates": 8,
+    "multi_qubit_gates": 0,
+    "depth": 19,
+    "two_qubit_depth": 8,
+    "ops": {
+      "x": 10,
+      "h": 6,
+      "cx": 6,
+      "cz": 2,
+      "measure": 2,
+      "barrier": 1
+    }
+  },
+  "transpiled_metrics": {
+    "num_qubits": 133,
+    "gate_count": 13,
+    "two_qubit_gates": 2,
+    "multi_qubit_gates": 0,
+    "depth": 8,
+    "two_qubit_depth": 2,
+    "ops": {
+      "sx": 6,
+      "rz": 5,
+      "cz": 2,
+      "measure": 2,
+      "barrier": 1
+    }
+  },
+  "sweep": [
+    {
+      "iterations": 0,
+      "counts": {
+        "00": 1033,
+        "11": 1041,
+        "01": 1000,
+        "10": 1022
+      },
+      "correct_key_probability": 0.24951171875,
+      "theoretical_success": 0.25,
+      "transpiled_metrics": {
+        "num_qubits": 133,
+        "gate_count": 6,
+        "two_qubit_gates": 0,
+        "multi_qubit_gates": 0,
+        "depth": 3,
+        "two_qubit_depth": 0,
+        "ops": {
+          "rz": 4,
+          "sx": 2,
+          "measure": 2,
+          "barrier": 1
+        }
+      }
+    },
+    {
+      "iterations": 1,
+      "counts": {
+        "10": 3960,
+        "00": 66,
+        "11": 59,
+        "01": 11
+      },
+      "correct_key_probability": 0.966796875,
+      "theoretical_success": 1.0,
+      "transpiled_metrics": {
+        "num_qubits": 133,
+        "gate_count": 13,
+        "two_qubit_gates": 2,
+        "multi_qubit_gates": 0,
+        "depth": 8,
+        "two_qubit_depth": 2,
+        "ops": {
+          "sx": 6,
+          "rz": 5,
+          "cz": 2,
+          "measure": 2,
+          "barrier": 1
+        }
+      }
+    },
+    {
+      "iterations": 2,
+      "counts": {
+        "01": 1040,
+        "11": 998,
+        "10": 1059,
+        "00": 999
+      },
+      "correct_key_probability": 0.258544921875,
+      "theoretical_success": 0.24999999999999956,
+      "transpiled_metrics": {
+        "num_qubits": 133,
+        "gate_count": 12,
+        "two_qubit_gates": 2,
+        "multi_qubit_gates": 0,
+        "depth": 8,
+        "two_qubit_depth": 2,
+        "ops": {
+          "rz": 5,
+          "sx": 4,
+          "cz": 2,
+          "measure": 2,
+          "x": 1,
+          "barrier": 1
+        }
+      }
+    }
+  ]
+}
