@@ -1,0 +1,68 @@
+{
+  "backend_kind": "fake",
+  "backend": "fake_torino",
+  "timestamp": "2026-11-07T02:15:19+00:00",
+  "n_bits": 3,
+  "sbox": [
+    6,
+    4,
+    1,
+    7,
+    2,
+    0,
+    3,
+    5
+  ],
+  "plaintext": 5,
+  "key": 6,
+  "ciphertext": 7,
+  "iterations": 2,
+  "shots": 4096,
+  "optimization_level": 3,
+  "dynamical_decoupling": true,
+  "job_id": "b8e42be4-7c41-43ee-b64a-31edf334ca09",
+  "counts": {
+    "011": 202,
+    "110": 2644,
+    "010": 230,
+    "001": 149,
+    "111": 294,
+    "101": 178,
+    "100": 218,
+    "000": 181
+  },
+  "correct_key_probability": 0.6455078125,
+  "theoretical_success": 0.9453125000000001,
+  "logical_metrics": {
+    "num_qubits": 3,
+    "gate_count": 75,
+    "two_qubit_gates": 12,
+    "multi_qubit_gates": 12,
+    "depth": 45,
+    "two_qubit_depth": 12,
+    "ops": {
+      "x": 28,
+      "h": 23,
+      "ccx": 12,
+      "cx": 12,
+      "measure": 3,
+      "barrier": 1
+    }
+  },
+  "transpiled_metrics": {
+    "num_qubits": 133,
+    "gate_count": 506,
+    "two_qubit_gates": 106,
+    "multi_qubit_gates": 0,
+    "depth": 385,
+    "two_qubit_depth": 106,
+    "ops": {
+      "sx": 218,
+      "rz": 174,
+      "cz": 106,
+      "x": 8,
+      "measure": 3,
+      "barrier": 1
+    }
+  }
+}
