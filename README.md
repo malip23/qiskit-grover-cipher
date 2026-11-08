@@ -1,8 +1,9 @@
 # qiskit-grover-cipher
 
 **A Grover attack on a toy block cipher.** We recover the secret key of a tiny cipher from one known
-(plaintext, ciphertext) pair using Grover's algorithm, on the Qiskit Aer simulator and on real IBM
-quantum hardware.
+(plaintext, ciphertext) pair using Grover's algorithm. It runs on the Qiskit Aer simulator and under
+realistic IBM device noise (Qiskit's fake backends, offline noise models of real IBM devices). The
+code is ready for real IBM quantum hardware, but the results shown here are simulations.
 
 ## The cipher
 

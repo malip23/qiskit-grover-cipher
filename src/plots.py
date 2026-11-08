@@ -155,7 +155,7 @@ def altair_scaling_chart(max_bits: int = 128, highlight: dict[int, str] | None =
     df = pd.DataFrame(rows)
     domain = ["classical brute force (avg 2ⁿ/2)", "Grover (≈ π/4 · √2ⁿ)"]
     color = alt.Color("method:N", title=None, scale=alt.Scale(domain=domain, range=[CLASSICAL_COLOR, KEY_COLOR]),
-                      legend=alt.Legend(orient="top"))
+                      legend=alt.Legend(orient="top", labelLimit=400))
     x = alt.X("bits:Q", title="Key length (bits)", scale=alt.Scale(domain=[0, max_bits]))
     y = alt.Y("log2_ops:Q", title="Key guesses / oracle calls (log scale)",
               axis=alt.Axis(labelExpr="'2^' + datum.value", tickMinStep=1))

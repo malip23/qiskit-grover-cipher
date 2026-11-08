@@ -160,7 +160,7 @@ guess = most_likely_key(counts)
 right.metric("Most frequent key", bits(guess, n), "correct" if guess == key else "wrong",
              delta_color="normal" if guess == key else "inverse")
 right.metric("P(secret key)", f"{sim_probs[key]:.1%}", help=f"Ideal: {theoretical_success(n, iterations):.1%}")
-right.metric("Random guess", f"{1 / N:.1%}")
+right.metric("Random guess", f"1 in {N}", help=f"{1 / N:.2%}")
 
 with st.expander("Circuit cost: exact vs. relative-phase S-box"):
     st.caption("On real hardware every gate must become 1- and 2-qubit gates on connected qubits. "
@@ -182,7 +182,9 @@ with st.expander("See the circuits"):
 # 4. Hardware (saved results only)
 # ---------------------------------------------------------------------------
 
-st.header("3 · Real IBM quantum hardware (saved results)")
+st.header("3 · Under IBM device noise (saved runs)")
+st.caption("Saved runs from results/. Runs on a *fake backend* use an offline noise model of a real IBM "
+           "device; any real-hardware runs are labelled 'real hardware'.")
 records = [r for r in load_results() if r.get("n_bits") == n]
 
 
@@ -195,11 +197,14 @@ def sbox_label(r: dict) -> str:
     return "relative-phase S-box" if r.get("relative_phase", False) else "exact S-box"
 
 
-if not records:
-    st.warning(f"No saved results for n = {n} in results/. Create one with:\n\n"
-               f"`python -m src.run_hardware --n {n} --plaintext {plaintext} --key {key} --sweep`  (real hardware)\n\n"
-               f"`python -m src.run_hardware --n {n} --plaintext {plaintext} --key {key} --sweep --fake`  "
-               f"(noisy local simulation)")
+if not records and n == 4:
+    st.info("**n = 4 is a simulator-only demo.** Even with the cheaper S-box, the 4-bit attack needs about "
+            "640 two-qubit gates after compiling for an IBM device, far too deep to survive today's noise. "
+            "Switch to **n = 3** (P = 101, K = 110) or **n = 2** (P = 01, K = 10) in the sidebar to see "
+            "the saved noisy runs.")
+elif not records:
+    st.info(f"No saved runs for n = {n} yet. Create a noisy local simulation with:\n\n"
+            f"`python -m src.run_hardware --n {n} --plaintext {plaintext} --key {key} --sweep --fake`")
 else:
     matching = [r for r in records if r["plaintext"] == plaintext and r["key"] == key]
     if not matching:
@@ -229,7 +234,7 @@ else:
 
     # Sweep: amplitude growth measured on the device, all iteration counts from ONE job.
     if rec.get("sweep"):
-        st.subheader("Amplitude growth on the device")
+        st.subheader("Amplitude growth under noise")
         st.caption("Every iteration count below ran in the same job. Noise pulls the measured curve below "
                    "the ideal one, and more iterations mean more gates and more noise.")
         st.altair_chart(altair_sweep_chart(rec["sweep"], n, f"measured ({kind_label(rec)})"), width="stretch")
@@ -237,7 +242,7 @@ else:
     # Side by side: ideal vs. every saved run for this same (n, P, K).
     same = [r for r in records if r["plaintext"] == rec["plaintext"] and r["key"] == rec["key"]]
     if same:
-        st.subheader("Side by side: ideal vs. noisy vs. hardware")
+        st.subheader("Side by side: ideal vs. saved noisy runs")
         rows = [{"run": f"ideal (noise-free), {rec['iterations']} iteration(s)",
                  "probability": theoretical_success(n, rec["iterations"]), "two_qubit_gates": None}]
         for r in sorted(same, key=lambda r: (r["backend_kind"] != "fake", r.get("relative_phase", False))):
