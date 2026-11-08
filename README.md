@@ -12,7 +12,7 @@ C = S(P ⊕ K)        P = plaintext, K = secret key, C = ciphertext (all n bits)
 ```
 
 | n | S-box | Where it runs |
-|---|-------|---------------|
+| --- | --- | --- |
 | 4 | PRESENT cipher S-box `C 5 6 B 9 0 A D 3 E F 8 4 7 1 2` (Bogdanov et al., CHES 2007) | simulator (main version) |
 | 3 | `6 4 1 7 2 0 3 5` | simulator + hardware |
 | 2 | `2 0 3 1` | simulator + hardware |
@@ -33,7 +33,7 @@ Then the standard Grover **diffusion**. Repeat `floor(π/4 · √2ⁿ)` times (1
 measure. The ideal success probability is 100% / 94.5% / 96.1%.
 
 | n | keys | classical guesses (avg) | Grover oracle calls |
-|---|------|-------------------------|---------------------|
+| --- | --- | --- | --- |
 | 2 | 4 | 2.5 | 1 |
 | 3 | 8 | 4.5 | 2 |
 | 4 | 16 | 8.5 | 3 |
@@ -48,18 +48,18 @@ measure. The ideal success probability is 100% / 94.5% / 96.1%.
 
 ```
 src/
-  cipher.py        classical cipher, S-box tables, brute-force search         (CS)
-  sbox_circuit.py  reversible S-box synthesis: BASELINE                      (ECE)
-  metrics.py       gate / 2-qubit gate / depth, before and after transpile    (ECE)
-  oracle.py        the Grover oracle                                          (CS)
-  grover.py        full Grover circuit, Aer runs, per-iteration probabilities (CS)
-  run_hardware.py  IBM Quantum runner (SamplerV2 + dynamical decoupling)     (CS)
-  plots.py         shared bar charts for the app and notebook                 (CS)
+  cipher.py        classical cipher, S-box tables, brute-force search
+  sbox_circuit.py  reversible S-box synthesis (baseline, room to optimize)
+  metrics.py       gate / 2-qubit gate / depth, before and after transpile
+  oracle.py        the Grover oracle
+  grover.py        full Grover circuit, Aer runs, per-iteration probabilities
+  run_hardware.py  IBM Quantum runner (SamplerV2 + dynamical decoupling)
+  plots.py         shared bar charts for the app and notebook
 tests/             pytest suite
 app.py             Streamlit demo
 notebooks/         step-by-step walkthrough
 results/           saved hardware runs (JSON), read by the demo
-docs/ECE_NOTES.md  handoff notes for the S-box / metrics work
+docs/OPTIMIZATION_NOTES.md   measured circuit costs and ideas for making the S-box cheaper
 ```
 
 ## Setup
@@ -152,7 +152,6 @@ python -m src.metrics      # transpiled gate counts and depth on an offline fake
 jupyter lab notebooks/01_walkthrough.ipynb
 ```
 
-## Team
+## Author
 
-- **CS:** cipher, oracle, Grover, hardware runner, tests, demo
-- **ECE:** S-box circuit synthesis and optimization, circuit cost metrics (see `docs/ECE_NOTES.md`)
+Built solo for a Qiskit / IBM Quantum hackathon.

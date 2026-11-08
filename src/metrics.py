@@ -1,10 +1,9 @@
 """Circuit cost metrics: gate count, 2-qubit gate count, depth.
 
 =============================================================================
-OWNER: ECE partner.
-BASELINE version so the pipeline (and the demo) can report costs. The ECE
-partner will extend it, e.g. with error-rate-weighted cost, estimated fidelity,
-or layout and routing analysis.
+BASELINE version so the pipeline (and the demo) can report costs. Possible
+extensions: error-rate-weighted cost, estimated fidelity, or layout and
+routing analysis.
 =============================================================================
 
 Why metrics matter: on real hardware each 2-qubit gate (CZ / ECR) has roughly

@@ -1,10 +1,9 @@
 """Reversible S-box circuits:  |x>  ->  |S(x)>  on n_bits qubits.
 
 =============================================================================
-OWNER: ECE partner.
-This file is a correct, working BASELINE so the whole pipeline runs end to end.
-The ECE partner will replace or optimize the S-box synthesis (fewer CNOTs,
-lower depth, hardware-aware layout, ancilla tricks, etc.).
+This is a correct, working BASELINE synthesis. It is the main place to
+optimize (fewer CNOTs, lower depth, hardware-aware layout, ancilla tricks);
+see docs/OPTIMIZATION_NOTES.md for measured costs and ideas.
 
 CONTRACT - keep this exact signature, the rest of the project depends on it:
 
